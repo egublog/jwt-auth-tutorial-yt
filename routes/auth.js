@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { body, validationResult } = require("express-validator");
+const {User} = require("../db/User");
 
 router.get("/", (req, res) => {
   res.send("Hello Auth!");
@@ -19,6 +20,13 @@ router.post(
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
+  // DBにユーザーが存在してるか確認
+  const user = User.find(user => user.email === email);
+
+  if(user) {
+    return res.status(400).json({ errors: [{ msg: "ユーザーが存在しています" }] });
+  }  
 });
 
 module.exports = router;
