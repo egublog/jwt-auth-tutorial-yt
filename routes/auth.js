@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { body, validationResult } = require("express-validator");
 const {User} = require("../db/User");
 const bcrypt = require("bcryptjs");
+const JWT = require("jsonwebtoken");
 
 router.get("/", (req, res) => {
   res.send("Hello Auth!");
@@ -36,6 +37,21 @@ router.post(
   User.push({
     email,
     password: hashedPassword,
+  });
+
+  // クライアントへJWTの発行
+  const token = await JWT.sign(
+    {
+      email,
+    },
+    "SECRET_KEY",
+    {
+      expiresIn: "24h",
+    }
+  );
+
+  return res.json({
+    token: token,
   });
 });
 
