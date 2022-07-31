@@ -55,6 +55,37 @@ router.post(
   });
 });
 
+// ログイン用のAPI
+router.post("/login", async (req, res) => {
+  const {email, password} = req.body;
+
+  const user = User.find(user => user.email === email);
+  if(!user) {
+    return res.status(400).json({ errors: [{ msg: "ユーザーが存在していません" }] });
+  }
+
+  // パスワードの複合、照合
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if(!isMatch) {
+    return res.status(400).json({ errors: [{ msg: "パスワードが間違っています" }] });
+  }
+
+  const token = await JWT.sign(
+    {
+      email,
+    },
+    "SECRET_KEY",
+    {
+      expiresIn: "24h",
+    }
+  );
+
+  return res.json({
+    token: token,
+  });
+});
+
 // DBのユーザーを確認するAPI
 router.get("/allUsers", (req, res) => {
   return res.json(User);
