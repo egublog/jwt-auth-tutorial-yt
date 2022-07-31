@@ -31,6 +31,12 @@ router.post(
 
   // パスワードの暗号化
   let hashedPassword = await bcrypt.hash(password, 10);
+
+  // DBへ保存
+  User.push({
+    email,
+    password: hashedPassword,
+  });
 });
 
 module.exports = router;
