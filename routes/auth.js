@@ -39,4 +39,9 @@ router.post(
   });
 });
 
+// DBのユーザーを確認するAPI
+router.get("/allUsers", (req, res) => {
+  return res.json(User);
+});
+
 module.exports = router;
