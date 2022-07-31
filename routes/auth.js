@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { body, validationResult } = require("express-validator");
 const {User} = require("../db/User");
+const bcrypt = require("bcryptjs");
 
 router.get("/", (req, res) => {
   res.send("Hello Auth!");
@@ -11,7 +12,7 @@ router.post(
   "/register",
   body("email").isEmail(),
   body("password").isLength({ min: 6 }),
-  (req, res) => {
+  async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -26,7 +27,10 @@ router.post(
 
   if(user) {
     return res.status(400).json({ errors: [{ msg: "ユーザーが存在しています" }] });
-  }  
+  }
+
+  // パスワードの暗号化
+  let hashedPassword = await bcrypt.hash(password, 10);
 });
 
 module.exports = router;
