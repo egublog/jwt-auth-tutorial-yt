@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
     res.send("Hello World!");
 });
 
+// expressをimportして、appを定義して、PORTを定義して、app.listen(PORT)を実行すると、サーバーが立ち上がる
 app.listen(PORT, () => {
   console.log("サーバーを起動中...");
 });
