@@ -6,8 +6,8 @@ const post = require('./routes/post');
 
 
 app.use(express.json()); // NOTE: express.json()を使うと、req.bodyがJSON形式で受け取れる
-app.use("/auth", auth);
-app.use("/post", post);
+app.use("/auth", auth); // NOTE: 接頭に/authがつくようになる
+app.use("/post", post);// NOTE: 接頭に/postがつくようになる
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
